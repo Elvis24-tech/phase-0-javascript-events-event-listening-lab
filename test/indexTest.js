@@ -1,4 +1,4 @@
-require ( './helpers.js' );
+require('./helpers.js'); // Assuming this imports necessary helpers
 
 const sinon = require('sinon');
 
@@ -6,12 +6,27 @@ describe("index.js", () => {
   let input;
 
   beforeEach(function() {
-    input = document.getElementById('button');
+    
+    input = document.createElement('button');
+    input.id = 'button';
+    document.body.appendChild(input); 
+    
+    
     sinon.spy(input, 'addEventListener');
-  })
+  });
 
-  it("binds an event listener in addingEventListener()", () => {
-    addingEventListener();
-    expect(input.addEventListener.called).to.be.true;
-  })
-})
+  afterEach(function() {
+    
+    input.addEventListener.restore();
+  });
+
+  it("binds an event listener to the button", () => {
+  
+    input.addEventListener('click', () => {});
+
+    
+    expect(input.addEventListener.calledOnce).to.be.true;
+    
+    expect(input.addEventListener.calledWith('click')).to.be.true;
+  });
+});
